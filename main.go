@@ -47,15 +47,15 @@ func (t *remover) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 
 	writeBufLen = len(buf)
 	switch {
-	case ISUTF32BigEndianBOM(buf):
+	case IsUTF32BigEndianBOM(buf):
 		buf = buf[BOMSize4Byte:]
-	case ISUTF32LittleEndianBOM(buf):
+	case IsUTF32LittleEndianBOM(buf):
 		buf = buf[BOMSize4Byte:]
-	case ISUTF8BOM(buf):
+	case IsUTF8BOM(buf):
 		buf = buf[BOMSize3Byte:]
-	case ISUTF16BigEndianBOM(buf):
+	case IsUTF16BigEndianBOM(buf):
 		buf = buf[BOMSize2Byte:]
-	case ISUTF16LittleEndianBOM(buf):
+	case IsUTF16LittleEndianBOM(buf):
 		buf = buf[BOMSize2Byte:]
 	}
 
@@ -74,22 +74,22 @@ func (t *remover) Reset() {
 	t.counter = 0
 }
 
-func ISUTF32BigEndianBOM(buf []byte) bool {
+func IsUTF32BigEndianBOM(buf []byte) bool {
 	return len(buf) >= BOMSize4Byte && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0xFE && buf[3] == 0xFF
 }
 
-func ISUTF32LittleEndianBOM(buf []byte) bool {
+func IsUTF32LittleEndianBOM(buf []byte) bool {
 	return len(buf) >= BOMSize4Byte && buf[0] == 0xFF && buf[1] == 0xFE && buf[2] == 0x00 && buf[3] == 0x00
 }
 
-func ISUTF8BOM(buf []byte) bool {
+func IsUTF8BOM(buf []byte) bool {
 	return len(buf) >= BOMSize3Byte && buf[0] == 0xEF && buf[1] == 0xBB && buf[2] == 0xBF
 }
 
-func ISUTF16BigEndianBOM(buf []byte) bool {
+func IsUTF16BigEndianBOM(buf []byte) bool {
 	return len(buf) >= BOMSize2Byte && buf[0] == 0xFE && buf[1] == 0xFF
 }
 
-func ISUTF16LittleEndianBOM(buf []byte) bool {
+func IsUTF16LittleEndianBOM(buf []byte) bool {
 	return len(buf) >= BOMSize2Byte && buf[0] == 0xFF && buf[1] == 0xFE
 }

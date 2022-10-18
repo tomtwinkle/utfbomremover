@@ -275,31 +275,31 @@ func FuzzTransformer(f *testing.F) {
 		f.Add(b)
 	}
 	f.Fuzz(func(t *testing.T, p []byte) {
-		if (utfbomremover.ISUTF32BigEndianBOM(p) && utfbomremover.ISUTF32BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.ISUTF32BigEndianBOM(p) && utfbomremover.ISUTF32LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.ISUTF32BigEndianBOM(p) && utfbomremover.ISUTF8BOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.ISUTF32BigEndianBOM(p) && utfbomremover.ISUTF16BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.ISUTF32BigEndianBOM(p) && utfbomremover.ISUTF16LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.ISUTF32LittleEndianBOM(p) && utfbomremover.ISUTF32BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.ISUTF32LittleEndianBOM(p) && utfbomremover.ISUTF32LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.ISUTF32LittleEndianBOM(p) && utfbomremover.ISUTF8BOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.ISUTF32LittleEndianBOM(p) && utfbomremover.ISUTF16BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.ISUTF32LittleEndianBOM(p) && utfbomremover.ISUTF16LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.ISUTF8BOM(p) && utfbomremover.ISUTF32BigEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
-			(utfbomremover.ISUTF8BOM(p) && utfbomremover.ISUTF32LittleEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
-			(utfbomremover.ISUTF8BOM(p) && utfbomremover.ISUTF8BOM(p[utfbomremover.BOMSize3Byte:])) ||
-			(utfbomremover.ISUTF8BOM(p) && utfbomremover.ISUTF16BigEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
-			(utfbomremover.ISUTF8BOM(p) && utfbomremover.ISUTF16LittleEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
-			(utfbomremover.ISUTF16BigEndianBOM(p) && utfbomremover.ISUTF32BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.ISUTF16BigEndianBOM(p) && utfbomremover.ISUTF32LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.ISUTF16BigEndianBOM(p) && utfbomremover.ISUTF8BOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.ISUTF16BigEndianBOM(p) && utfbomremover.ISUTF16BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.ISUTF16BigEndianBOM(p) && utfbomremover.ISUTF16LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.ISUTF16LittleEndianBOM(p) && utfbomremover.ISUTF32BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.ISUTF16LittleEndianBOM(p) && utfbomremover.ISUTF32LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.ISUTF16LittleEndianBOM(p) && utfbomremover.ISUTF8BOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.ISUTF16LittleEndianBOM(p) && utfbomremover.ISUTF16BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.ISUTF16LittleEndianBOM(p) && utfbomremover.ISUTF16LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) {
+		if (utfbomremover.IsUTF32BigEndianBOM(p) && utfbomremover.IsUTF32BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
+			(utfbomremover.IsUTF32BigEndianBOM(p) && utfbomremover.IsUTF32LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
+			(utfbomremover.IsUTF32BigEndianBOM(p) && utfbomremover.IsUTF8BOM(p[utfbomremover.BOMSize4Byte:])) ||
+			(utfbomremover.IsUTF32BigEndianBOM(p) && utfbomremover.IsUTF16BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
+			(utfbomremover.IsUTF32BigEndianBOM(p) && utfbomremover.IsUTF16LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
+			(utfbomremover.IsUTF32LittleEndianBOM(p) && utfbomremover.IsUTF32BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
+			(utfbomremover.IsUTF32LittleEndianBOM(p) && utfbomremover.IsUTF32LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
+			(utfbomremover.IsUTF32LittleEndianBOM(p) && utfbomremover.IsUTF8BOM(p[utfbomremover.BOMSize4Byte:])) ||
+			(utfbomremover.IsUTF32LittleEndianBOM(p) && utfbomremover.IsUTF16BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
+			(utfbomremover.IsUTF32LittleEndianBOM(p) && utfbomremover.IsUTF16LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
+			(utfbomremover.IsUTF8BOM(p) && utfbomremover.IsUTF32BigEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
+			(utfbomremover.IsUTF8BOM(p) && utfbomremover.IsUTF32LittleEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
+			(utfbomremover.IsUTF8BOM(p) && utfbomremover.IsUTF8BOM(p[utfbomremover.BOMSize3Byte:])) ||
+			(utfbomremover.IsUTF8BOM(p) && utfbomremover.IsUTF16BigEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
+			(utfbomremover.IsUTF8BOM(p) && utfbomremover.IsUTF16LittleEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
+			(utfbomremover.IsUTF16BigEndianBOM(p) && utfbomremover.IsUTF32BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
+			(utfbomremover.IsUTF16BigEndianBOM(p) && utfbomremover.IsUTF32LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
+			(utfbomremover.IsUTF16BigEndianBOM(p) && utfbomremover.IsUTF8BOM(p[utfbomremover.BOMSize2Byte:])) ||
+			(utfbomremover.IsUTF16BigEndianBOM(p) && utfbomremover.IsUTF16BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
+			(utfbomremover.IsUTF16BigEndianBOM(p) && utfbomremover.IsUTF16LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
+			(utfbomremover.IsUTF16LittleEndianBOM(p) && utfbomremover.IsUTF32BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
+			(utfbomremover.IsUTF16LittleEndianBOM(p) && utfbomremover.IsUTF32LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
+			(utfbomremover.IsUTF16LittleEndianBOM(p) && utfbomremover.IsUTF8BOM(p[utfbomremover.BOMSize2Byte:])) ||
+			(utfbomremover.IsUTF16LittleEndianBOM(p) && utfbomremover.IsUTF16BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
+			(utfbomremover.IsUTF16LittleEndianBOM(p) && utfbomremover.IsUTF16LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) {
 			t.Skip()
 		}
 		tr := utfbomremover.NewTransformer()
@@ -308,19 +308,19 @@ func FuzzTransformer(f *testing.F) {
 			if err != nil {
 				t.Fatal("unexpected error:", err)
 			}
-			if utfbomremover.ISUTF32BigEndianBOM(r) {
+			if utfbomremover.IsUTF32BigEndianBOM(r) {
 				t.Fatalf("utf-32 be bom [%X]", r)
 			}
-			if utfbomremover.ISUTF32LittleEndianBOM(r) {
+			if utfbomremover.IsUTF32LittleEndianBOM(r) {
 				t.Fatalf("utf-32 le bom [%X]", r)
 			}
-			if utfbomremover.ISUTF8BOM(r) {
+			if utfbomremover.IsUTF8BOM(r) {
 				t.Fatalf("utf-8 bom [%X]", r)
 			}
-			if utfbomremover.ISUTF16BigEndianBOM(r) {
+			if utfbomremover.IsUTF16BigEndianBOM(r) {
 				t.Fatalf("utf-16 be bom [%X]", r)
 			}
-			if utfbomremover.ISUTF16LittleEndianBOM(r) {
+			if utfbomremover.IsUTF16LittleEndianBOM(r) {
 				t.Fatalf("utf-16 le bom [%X]", r)
 			}
 			p = p[n:]
