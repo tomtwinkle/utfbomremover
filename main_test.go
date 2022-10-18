@@ -12,7 +12,7 @@ import (
 	"github.com/tomtwinkle/utfbomremover"
 )
 
-// nolint: gocyclo
+// nolint: gocyclo, jscpd
 func TestNewTransformer(t *testing.T) {
 	type Param struct {
 		data []byte
