@@ -12,6 +12,7 @@ import (
 	"github.com/tomtwinkle/utfbomremover"
 )
 
+// nolint: gocyclo
 func TestNewTransformer(t *testing.T) {
 	type Param struct {
 		data []byte
@@ -253,7 +254,7 @@ func TestNewTransformer(t *testing.T) {
 	}
 }
 
-// nolint: typecheck
+// nolint: typecheck, gocyclo
 func FuzzTransformer(f *testing.F) {
 	bomseeds := [][]byte{
 		{},
