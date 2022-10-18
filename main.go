@@ -5,10 +5,11 @@ import (
 )
 
 func NewTransformer() transform.Transformer {
-	return &remover{}
+	return &remover{nop: transform.Nop}
 }
 
 type remover struct {
+	nop     transform.Transformer
 	counter int
 }
 
@@ -26,6 +27,12 @@ func (t *remover) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 		return
 	}
 
+	if t.counter > 0 {
+		// BOMは先頭にしか存在しないため1回目以外はSpanningTransformerに委譲する
+		return t.nop.Transform(dst, src, atEOF)
+	}
+
+	// TODO: buffer size が BOM 以下の場合おそらくBOM削除されないので要確認
 	var (
 		buf         []byte
 		writeBufLen int
@@ -37,21 +44,21 @@ func (t *remover) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err er
 	} else {
 		buf = _src
 	}
+
 	writeBufLen = len(buf)
-	if t.counter == 0 {
-		switch {
-		case ISUTF32BigEndianBOM(buf):
-			buf = buf[BOMSize4Byte:]
-		case ISUTF32LittleEndianBOM(buf):
-			buf = buf[BOMSize4Byte:]
-		case ISUTF8BOM(buf):
-			buf = buf[BOMSize3Byte:]
-		case ISUTF16BigEndianBOM(buf):
-			buf = buf[BOMSize2Byte:]
-		case ISUTF16LittleEndianBOM(buf):
-			buf = buf[BOMSize2Byte:]
-		}
+	switch {
+	case ISUTF32BigEndianBOM(buf):
+		buf = buf[BOMSize4Byte:]
+	case ISUTF32LittleEndianBOM(buf):
+		buf = buf[BOMSize4Byte:]
+	case ISUTF8BOM(buf):
+		buf = buf[BOMSize3Byte:]
+	case ISUTF16BigEndianBOM(buf):
+		buf = buf[BOMSize2Byte:]
+	case ISUTF16LittleEndianBOM(buf):
+		buf = buf[BOMSize2Byte:]
 	}
+
 	dstN := copy(dst, buf)
 	nSrc = writeBufLen
 	nDst = dstN
