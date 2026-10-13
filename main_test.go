@@ -12,7 +12,7 @@ import (
 	"github.com/tomtwinkle/utfbomremover"
 )
 
-// nolint: gocyclo, jscpd
+//nolint:gocyclo
 func TestNewTransformer(t *testing.T) {
 	type Param struct {
 		data []byte
@@ -34,10 +34,10 @@ func TestNewTransformer(t *testing.T) {
 					t.Fatal(err)
 				}
 				return Param{
-						data: data,
-					}, Want{
-						data: data,
-					}
+					data: data,
+				}, Want{
+					data: data,
+				}
 			},
 		},
 		"UTF-32 LittleEndian:no BOM": {
@@ -49,20 +49,20 @@ func TestNewTransformer(t *testing.T) {
 					t.Fatal(err)
 				}
 				return Param{
-						data: data,
-					}, Want{
-						data: data,
-					}
+					data: data,
+				}, Want{
+					data: data,
+				}
 			},
 		},
 		"UTF-8:no BOM": {
-			arrange: func(t *testing.T) (Param, Want) {
+			arrange: func(_ *testing.T) (Param, Want) {
 				data := bytes.Repeat([]byte("abcd一二三四五六七八九十拾壱"), 1000)
 				return Param{
-						data: data,
-					}, Want{
-						data: data,
-					}
+					data: data,
+				}, Want{
+					data: data,
+				}
 			},
 		},
 		"UTF-16 BigEndian:no BOM": {
@@ -74,10 +74,10 @@ func TestNewTransformer(t *testing.T) {
 					t.Fatal(err)
 				}
 				return Param{
-						data: data,
-					}, Want{
-						data: data,
-					}
+					data: data,
+				}, Want{
+					data: data,
+				}
 			},
 		},
 		"UTF-16 LittleEndian:no BOM": {
@@ -89,55 +89,55 @@ func TestNewTransformer(t *testing.T) {
 					t.Fatal(err)
 				}
 				return Param{
-						data: data,
-					}, Want{
-						data: data,
-					}
+					data: data,
+				}, Want{
+					data: data,
+				}
 			},
 		},
 		"UTF-32 BigEndian:BOM only": {
-			arrange: func(t *testing.T) (Param, Want) {
+			arrange: func(_ *testing.T) (Param, Want) {
 				return Param{
-						data: []byte{0x00, 0x00, 0xFE, 0xFF},
-					}, Want{
-						data: []byte{},
-					}
+					data: []byte{0x00, 0x00, 0xFE, 0xFF},
+				}, Want{
+					data: []byte{},
+				}
 			},
 		},
 		"UTF-32 LittleEndian:BOM only": {
-			arrange: func(t *testing.T) (Param, Want) {
+			arrange: func(_ *testing.T) (Param, Want) {
 				return Param{
-						data: []byte{0xFF, 0xFE, 0x00, 0x00},
-					}, Want{
-						data: []byte{},
-					}
+					data: []byte{0xFF, 0xFE, 0x00, 0x00},
+				}, Want{
+					data: []byte{},
+				}
 			},
 		},
 		"UTF-8:BOM only": {
-			arrange: func(t *testing.T) (Param, Want) {
+			arrange: func(_ *testing.T) (Param, Want) {
 				return Param{
-						data: []byte{0xEF, 0xBB, 0xBF},
-					}, Want{
-						data: []byte{},
-					}
+					data: []byte{0xEF, 0xBB, 0xBF},
+				}, Want{
+					data: []byte{},
+				}
 			},
 		},
 		"UTF-16 BigEndian:BOM only": {
-			arrange: func(t *testing.T) (Param, Want) {
+			arrange: func(_ *testing.T) (Param, Want) {
 				return Param{
-						data: []byte{0xFE, 0xFF},
-					}, Want{
-						data: []byte{},
-					}
+					data: []byte{0xFE, 0xFF},
+				}, Want{
+					data: []byte{},
+				}
 			},
 		},
 		"UTF-16 LittleEndian:BOM only": {
-			arrange: func(t *testing.T) (Param, Want) {
+			arrange: func(_ *testing.T) (Param, Want) {
 				return Param{
-						data: []byte{0xFF, 0xFE},
-					}, Want{
-						data: []byte{},
-					}
+					data: []byte{0xFF, 0xFE},
+				}, Want{
+					data: []byte{},
+				}
 			},
 		},
 		"UTF-32 BigEndian:BOM": {
@@ -149,10 +149,10 @@ func TestNewTransformer(t *testing.T) {
 					t.Fatal(err)
 				}
 				return Param{
-						data: data,
-					}, Want{
-						data: data[utfbomremover.BOMSize4Byte:],
-					}
+					data: data,
+				}, Want{
+					data: data[utfbomremover.BOMSize4Byte:],
+				}
 			},
 		},
 		"UTF-32 LittleEndian:BOM": {
@@ -164,21 +164,21 @@ func TestNewTransformer(t *testing.T) {
 					t.Fatal(err)
 				}
 				return Param{
-						data: data,
-					}, Want{
-						data: data[utfbomremover.BOMSize4Byte:],
-					}
+					data: data,
+				}, Want{
+					data: data[utfbomremover.BOMSize4Byte:],
+				}
 			},
 		},
 		"UTF-8:BOM": {
-			arrange: func(t *testing.T) (Param, Want) {
+			arrange: func(_ *testing.T) (Param, Want) {
 				data := bytes.Repeat([]byte("abcd一二三四五六七八九十拾壱"), 1000)
 				bomData := append([]byte{0xEF, 0xBB, 0xBF}, data...)
 				return Param{
-						data: bomData,
-					}, Want{
-						data: data,
-					}
+					data: bomData,
+				}, Want{
+					data: data,
+				}
 			},
 		},
 		"UTF-16 BigEndian:BOM": {
@@ -190,10 +190,10 @@ func TestNewTransformer(t *testing.T) {
 					t.Fatal(err)
 				}
 				return Param{
-						data: data,
-					}, Want{
-						data: data[utfbomremover.BOMSize2Byte:],
-					}
+					data: data,
+				}, Want{
+					data: data[utfbomremover.BOMSize2Byte:],
+				}
 			},
 		},
 		"UTF-16 LittleEndian:BOM": {
@@ -205,19 +205,19 @@ func TestNewTransformer(t *testing.T) {
 					t.Fatal(err)
 				}
 				return Param{
-						data: data,
-					}, Want{
-						data: data[utfbomremover.BOMSize2Byte:],
-					}
+					data: data,
+				}, Want{
+					data: data[utfbomremover.BOMSize2Byte:],
+				}
 			},
 		},
-		"Illegal case UTF-8:BOM BOM": {
-			arrange: func(t *testing.T) (Param, Want) {
+		"UTF-8:multiple BOMs": {
+			arrange: func(_ *testing.T) (Param, Want) {
 				return Param{
-						data: []byte{0xEF, 0xBB, 0xBF, 0xEF, 0xBB, 0xBF},
-					}, Want{
-						data: []byte{0xEF, 0xBB, 0xBF},
-					}
+					data: []byte{0xEF, 0xBB, 0xBF, 0xEF, 0xBB, 0xBF},
+				}, Want{
+					data: []byte{},
+				}
 			},
 		},
 	}
@@ -247,10 +247,127 @@ func TestNewTransformer(t *testing.T) {
 			if len(want.data) != actual.Len() {
 				t.Errorf("byte length does not match %d=%d", len(want.data), actual.Len())
 			}
-			if string(want.data) != string(actual.Bytes()) {
+			if !bytes.Equal(want.data, actual.Bytes()) {
 				t.Errorf("byte does not match\n%v", actual.Bytes())
 			}
 		})
+	}
+}
+
+func TestTransformerMultipleLeadingBOMs(t *testing.T) {
+	// Repeated markers are removed by policy, even though the same bytes can
+	// represent an intentional leading U+FEFF character after the first marker.
+	testCases := []struct {
+		name    string
+		bom     []byte
+		payload []byte
+	}{
+		{name: "UTF-8", bom: []byte{0xEF, 0xBB, 0xBF}, payload: []byte("A")},
+		{name: "UTF-16BE", bom: []byte{0xFE, 0xFF}, payload: []byte{0x00, 0x41}},
+		{name: "UTF-16LE", bom: []byte{0xFF, 0xFE}, payload: []byte{0x41, 0x00}},
+		{name: "UTF-32BE", bom: []byte{0x00, 0x00, 0xFE, 0xFF}, payload: []byte{0x00, 0x00, 0x00, 0x41}},
+		{name: "UTF-32LE", bom: []byte{0xFF, 0xFE, 0x00, 0x00}, payload: []byte{0x41, 0x00, 0x00, 0x00}},
+	}
+
+	for _, testCase := range testCases {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			for _, repetition := range []struct {
+				count int
+				name  string
+			}{{count: 2, name: "twice"}, {count: 3, name: "three times"}} {
+				repeatedBOMs := make([][]byte, repetition.count)
+				for i := range repeatedBOMs {
+					repeatedBOMs[i] = testCase.bom
+				}
+				input := append(bytes.Join(repeatedBOMs, nil), testCase.payload...)
+				t.Run(repetition.name, func(t *testing.T) {
+					assertTransformed(t, input, testCase.payload)
+				})
+			}
+
+			input := append(bytes.Repeat(testCase.bom, 2), testCase.payload...)
+			t.Run("bytewise writes", func(t *testing.T) {
+				assertTransformedBytewise(t, input, testCase.payload)
+			})
+		})
+	}
+
+	t.Run("mixed encodings", func(t *testing.T) {
+		markers := [][]byte{
+			{0xEF, 0xBB, 0xBF},
+			{0x00, 0x00, 0xFE, 0xFF},
+			{0xFE, 0xFF},
+			{0xFF, 0xFE},
+			{0xFF, 0xFE, 0x00, 0x00},
+			{0xEF, 0xBB, 0xBF},
+		}
+		input := append(bytes.Join(markers, nil), []byte("payload")...)
+		assertTransformed(t, input, []byte("payload"))
+	})
+
+	t.Run("BOM after content is preserved", func(t *testing.T) {
+		input := []byte{0xEF, 0xBB, 0xBF, 'A', 0xEF, 0xBB, 0xBF, 'B'}
+		want := []byte{'A', 0xEF, 0xBB, 0xBF, 'B'}
+		assertTransformed(t, input, want)
+	})
+
+	t.Run("near signatures are preserved", func(t *testing.T) {
+		for _, input := range [][]byte{
+			{0xEF, 0xBB, 0xBE},
+			{0xFE, 0xFE},
+			{0x00, 0x00, 0xFE, 0xFE},
+		} {
+			assertTransformed(t, input, input)
+		}
+	})
+
+	t.Run("incomplete signature at EOF is preserved", func(t *testing.T) {
+		for _, input := range [][]byte{
+			{0xEF, 0xBB},
+			{0x00, 0x00, 0xFE},
+		} {
+			assertTransformed(t, input, input)
+		}
+	})
+
+	t.Run("UTF-32LE signature overlaps UTF-16LE BOM and NUL", func(t *testing.T) {
+		// FF FE 00 00 is either a UTF-32LE BOM or a UTF-16LE BOM followed by U+0000.
+		input := []byte{0xFF, 0xFE, 0x00, 0x00}
+		assertTransformed(t, input, nil)
+	})
+}
+
+func assertTransformed(t *testing.T, input, want []byte) {
+	t.Helper()
+	actual, nSrc, err := transform.Bytes(utfbomremover.NewTransformer(), input)
+	if err != nil {
+		t.Fatalf("transform.Bytes() error = %v", err)
+	}
+	if nSrc != len(input) {
+		t.Fatalf("consumed source bytes = %d, want %d", nSrc, len(input))
+	}
+	if !bytes.Equal(actual, want) {
+		t.Fatalf("transformed bytes = % X, want % X", actual, want)
+	}
+}
+
+func assertTransformedBytewise(t *testing.T, input, want []byte) {
+	t.Helper()
+	var output bytes.Buffer
+	writer := transform.NewWriter(&output, utfbomremover.NewTransformer())
+	for i := range input {
+		if n, err := writer.Write(input[i : i+1]); err != nil {
+			t.Fatalf("Write() error = %v", err)
+		} else if n != 1 {
+			t.Fatalf("Write() consumed %d bytes, want 1", n)
+		}
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatalf("Close() error = %v", err)
+	}
+	if !bytes.Equal(output.Bytes(), want) {
+		t.Fatalf("transformed bytes = % X, want % X", output.Bytes(), want)
 	}
 }
 
@@ -259,10 +376,15 @@ func FuzzTransformer(f *testing.F) {
 	bomseeds := [][]byte{
 		{},
 		{0x00, 0x00, 0xFE, 0xFF},
+		{0x00, 0x00, 0xFE, 0xFF, 0x00, 0x00, 0xFE, 0xFF},
 		{0xFF, 0xFE, 0x00, 0x00},
+		{0xFF, 0xFE, 0x00, 0x00, 0xFF, 0xFE, 0x00, 0x00},
 		{0xEF, 0xBB, 0xBF},
+		{0xEF, 0xBB, 0xBF, 0xEF, 0xBB, 0xBF},
 		{0xFE, 0xFF},
+		{0xFE, 0xFF, 0xFE, 0xFF},
 		{0xFF, 0xFE},
+		{0xFF, 0xFE, 0xFF, 0xFE},
 	}
 	seeds := [][]byte{
 		[]byte("abcdefghijklmnopqrstuvwxyz"),
@@ -275,33 +397,6 @@ func FuzzTransformer(f *testing.F) {
 		f.Add(b)
 	}
 	f.Fuzz(func(t *testing.T, p []byte) {
-		if (utfbomremover.IsUTF32BigEndianBOM(p) && utfbomremover.IsUTF32BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.IsUTF32BigEndianBOM(p) && utfbomremover.IsUTF32LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.IsUTF32BigEndianBOM(p) && utfbomremover.IsUTF8BOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.IsUTF32BigEndianBOM(p) && utfbomremover.IsUTF16BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.IsUTF32BigEndianBOM(p) && utfbomremover.IsUTF16LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.IsUTF32LittleEndianBOM(p) && utfbomremover.IsUTF32BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.IsUTF32LittleEndianBOM(p) && utfbomremover.IsUTF32LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.IsUTF32LittleEndianBOM(p) && utfbomremover.IsUTF8BOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.IsUTF32LittleEndianBOM(p) && utfbomremover.IsUTF16BigEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.IsUTF32LittleEndianBOM(p) && utfbomremover.IsUTF16LittleEndianBOM(p[utfbomremover.BOMSize4Byte:])) ||
-			(utfbomremover.IsUTF8BOM(p) && utfbomremover.IsUTF32BigEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
-			(utfbomremover.IsUTF8BOM(p) && utfbomremover.IsUTF32LittleEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
-			(utfbomremover.IsUTF8BOM(p) && utfbomremover.IsUTF8BOM(p[utfbomremover.BOMSize3Byte:])) ||
-			(utfbomremover.IsUTF8BOM(p) && utfbomremover.IsUTF16BigEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
-			(utfbomremover.IsUTF8BOM(p) && utfbomremover.IsUTF16LittleEndianBOM(p[utfbomremover.BOMSize3Byte:])) ||
-			(utfbomremover.IsUTF16BigEndianBOM(p) && utfbomremover.IsUTF32BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.IsUTF16BigEndianBOM(p) && utfbomremover.IsUTF32LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.IsUTF16BigEndianBOM(p) && utfbomremover.IsUTF8BOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.IsUTF16BigEndianBOM(p) && utfbomremover.IsUTF16BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.IsUTF16BigEndianBOM(p) && utfbomremover.IsUTF16LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.IsUTF16LittleEndianBOM(p) && utfbomremover.IsUTF32BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.IsUTF16LittleEndianBOM(p) && utfbomremover.IsUTF32LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.IsUTF16LittleEndianBOM(p) && utfbomremover.IsUTF8BOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.IsUTF16LittleEndianBOM(p) && utfbomremover.IsUTF16BigEndianBOM(p[utfbomremover.BOMSize2Byte:])) ||
-			(utfbomremover.IsUTF16LittleEndianBOM(p) && utfbomremover.IsUTF16LittleEndianBOM(p[utfbomremover.BOMSize2Byte:])) {
-			t.Skip()
-		}
 		tr := utfbomremover.NewTransformer()
 		for len(p) > 0 {
 			r, n, err := transform.Bytes(tr, p)

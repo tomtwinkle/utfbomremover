@@ -1,6 +1,8 @@
 package utfbomremover
 
 import (
+	"bytes"
+
 	"golang.org/x/text/transform"
 )
 
@@ -9,8 +11,8 @@ func NewTransformer() transform.Transformer {
 }
 
 type remover struct {
-	nop     transform.Transformer
-	counter int
+	nop  transform.Transformer
+	done bool
 }
 
 var _ transform.Transformer = (*remover)(nil)
@@ -21,57 +23,77 @@ const (
 	BOMSize2Byte = 2
 )
 
-func (t *remover) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err error) {
-	_src := src
-	if len(_src) == 0 && atEOF {
-		return
-	}
+var bomSignatures = [][]byte{
+	{0x00, 0x00, 0xFE, 0xFF}, // UTF-32 Big Endian
+	{0xFF, 0xFE, 0x00, 0x00}, // UTF-32 Little Endian
+	{0xEF, 0xBB, 0xBF},       // UTF-8
+	{0xFE, 0xFF},             // UTF-16 Big Endian
+	{0xFF, 0xFE},             // UTF-16 Little Endian
+}
 
-	if t.counter > 0 {
-		// BOMは先頭にしか存在しないため1回目以外はSpanningTransformerに委譲する
+func (t *remover) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err error) {
+	if t.done {
 		return t.nop.Transform(dst, src, atEOF)
 	}
 
-	// TODO: buffer size が BOM 以下の場合おそらくBOM削除されないので要確認
-	var (
-		buf         []byte
-		writeBufLen int
-		remainder   int
-	)
-	if len(_src) >= len(dst) {
-		buf = _src[:len(dst)]
-		remainder = len(_src) - len(buf)
-	} else {
-		buf = _src
+	if len(src) == 0 {
+		if atEOF {
+			t.done = true
+		}
+		return
 	}
 
-	writeBufLen = len(buf)
-	switch {
-	case IsUTF32BigEndianBOM(buf):
-		buf = buf[BOMSize4Byte:]
-	case IsUTF32LittleEndianBOM(buf):
-		buf = buf[BOMSize4Byte:]
-	case IsUTF8BOM(buf):
-		buf = buf[BOMSize3Byte:]
-	case IsUTF16BigEndianBOM(buf):
-		buf = buf[BOMSize2Byte:]
-	case IsUTF16LittleEndianBOM(buf):
-		buf = buf[BOMSize2Byte:]
+	for nSrc < len(src) {
+		bomSize, partial := leadingBOMSize(src[nSrc:], atEOF)
+		if partial {
+			return 0, nSrc, transform.ErrShortSrc
+		}
+		if bomSize == 0 {
+			t.done = true
+			break
+		}
+		nSrc += bomSize
 	}
 
-	dstN := copy(dst, buf)
-	nSrc = writeBufLen
-	nDst = dstN
-	if remainder > 0 {
-		// over destination buffer
+	if nSrc == len(src) {
+		if atEOF {
+			t.done = true
+		}
+		return
+	}
+
+	remaining := src[nSrc:]
+	nDst = copy(dst, remaining)
+	nSrc += nDst
+	if nDst < len(remaining) {
 		err = transform.ErrShortDst
 	}
-	t.counter++
 	return
 }
 
 func (t *remover) Reset() {
-	t.counter = 0
+	t.done = false
+}
+
+// leadingBOMSize reports the size of a BOM at the start of buf. If the bytes
+// could still become a BOM, partial is true so the caller can wait for input.
+func leadingBOMSize(buf []byte, atEOF bool) (size int, partial bool) {
+	if len(buf) == 0 {
+		return 0, false
+	}
+
+	var matchingSize int
+	for _, signature := range bomSignatures {
+		if bytes.HasPrefix(buf, signature) && len(signature) > matchingSize {
+			matchingSize = len(signature)
+		}
+
+		if !atEOF && len(buf) < len(signature) && bytes.Equal(buf, signature[:len(buf)]) {
+			return 0, true
+		}
+	}
+
+	return matchingSize, false
 }
 
 func IsUTF32BigEndianBOM(buf []byte) bool {
