@@ -1,3 +1,4 @@
+---
 name: Build Check
 
 on:
@@ -6,26 +7,31 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     strategy:
       matrix:
-        go-version: [ 1.17.x, 1.18.x, 1.19.x]
-        os: [ ubuntu-latest ]
-        entrypoint: [ "main.go" ]
+        go-version: [1.26.x]
+        os: [ubuntu-latest]
+        entrypoint: ["main.go"]
 
     runs-on: ${{ matrix.os }}
     timeout-minutes: 5
     steps:
       - name: Install Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: ${{ matrix.go-version }}
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Go Module Download
         run: go mod download
 
-      - name : Build Check
-        run: go build  ${{ matrix.entrypoint }}
+      - name: Build Check
+        run: go build ${{ matrix.entrypoint }}

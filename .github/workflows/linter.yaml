@@ -1,3 +1,4 @@
+---
 #################################
 #################################
 ## Super Linter GitHub Actions ##
@@ -5,17 +6,16 @@
 #################################
 name: Lint
 
-#
-# Documentation:
-# https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions
-#
-
 #############################
 # Start the job on all push #
 #############################
 on:
   pull_request:
     branches: [main]
+
+permissions:
+  contents: read
+  statuses: write
 
 ###############
 # Set the Job #
@@ -35,18 +35,35 @@ jobs:
       # Checkout the code base #
       ##########################
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
+          # Fetch full history so Super-Linter can identify changed files.
           fetch-depth: 0
+          persist-credentials: false
 
       ################################
       # Run Linter against code base #
       ################################
       - name: Lint Code Base
-        uses: github/super-linter@v4
+        # Super-Linter v9.0.0.
+        uses: super-linter/super-linter@2da136927bd4a73596db63044b504547c62cb854
         env:
           VALIDATE_ALL_CODEBASE: false
+          # Exclude validators for absent languages or unused configurations.
+          VALIDATE_BIOME_FORMAT: false
+          VALIDATE_BIOME_LINT: false
+          VALIDATE_GIT_COMMITLINT: false
           VALIDATE_JSCPD: false
+          VALIDATE_PRE_COMMIT: false
+          VALIDATE_PYTHON: false
+          VALIDATE_PYTHON_BLACK: false
+          VALIDATE_PYTHON_FLAKE8: false
+          VALIDATE_PYTHON_ISORT: false
+          VALIDATE_PYTHON_MYPY: false
+          VALIDATE_PYTHON_PYLINT: false
+          VALIDATE_PYTHON_RUFF: false
+          VALIDATE_PYTHON_RUFF_FORMAT: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
+          SAVE_SUPER_LINTER_SUMMARY: true

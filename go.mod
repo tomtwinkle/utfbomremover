@@ -1,5 +1,5 @@
 module github.com/tomtwinkle/utfbomremover
 
-go 1.19
+go 1.26.0
 
-require golang.org/x/text v0.3.7
+require golang.org/x/text v0.43.0
